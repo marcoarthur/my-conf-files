@@ -14,6 +14,10 @@ use lib qw(./lib);
 use Mojo::Base -strict;
 use Mojo::Pg;
 use IO::Prompter;
+use Mojo::Loader qw(load_class);
+use Module::Format::Module;
+use String::ShellQuote;
+use B::Deparse;
 
 sub main::pg_connect {
     my ( $user, $pass ) = ( $ENV{DB_PG_USER}, $ENV{DB_PG_PASS} );
@@ -28,6 +32,38 @@ sub main::pg_connect {
     return $pg;
 
     #return my $db = $pg->db;
+}
+
+sub main::inspect_class {
+    my $class = shift;
+    my $e     = load_class $class;
+    die qq{ Loading "$class" failed: $e} if ref $e;
+    $class = Module::Format::Module->from( { format => 'colon', value => $class } );
+    my $module_file = $INC{ $class->format_as('unix') };
+    my $doc         = PPI::Document->new($module_file);
+
+    my %sub;
+    for my $sub ( @{ $doc->find('PPI::Statement::Sub') || [] } ) {
+        unless ( $sub->forward ) {
+            $sub{ $sub->name } = $sub->content;
+        }
+    }
+
+    return \%sub;
+}
+
+sub main::inspect_sub {
+    my $coderef = shift;
+    my $deparse = B::Deparse->new( "-p", "-sC" );
+    return $deparse->coderef2text($coderef);
+}
+
+sub main::editor {
+    my @lines = @_;
+    my $cmd   = 'echo ' . shell_quote @lines;
+    $cmd .= " | vipe | cat";
+    my $out = `$cmd`;
+    return $out;
 }
 
 sub main::pp { print Data::Dumper->Dump( [@_] ) }
