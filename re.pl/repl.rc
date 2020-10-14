@@ -110,3 +110,5 @@ $_REPL->fancy_continuation_prompt(
     }
 );
 $Devel::REPL::Plugin::Packages::PKG_SAVE = 'main';
+
+# vim: ft=perl
