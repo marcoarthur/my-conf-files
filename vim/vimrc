@@ -22,7 +22,7 @@ set diffopt=vertical
 set rtp+=~/.fzf
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn','\%81v', 100)
-colorscheme elflord
+set background=dark
 
 
 " do tpope magic sourcery
@@ -154,7 +154,10 @@ Plug 'https://github.com/Shougo/vimproc.vim.git'
 Plug 'sebdah/vim-delve'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'janko/vim-test'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf'
+Plug 'arcticicestudio/nord-vim'
+Plug 'KeitaNakamura/neodark.vim'
+" Plug 'dense-analysis/ale'
 call plug#end()
 
 " Vundle
@@ -172,7 +175,10 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-sleuth'
 Plugin 'itchyny/lightline.vim'
 Plugin 'alvan/vim-closetag'
+Plugin 'joshdick/onedark.vim'
 call vundle#end()
+
+colorscheme neodark
 
 " Vim eslint
 "
@@ -185,6 +191,12 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+
+" 
+" R linter
+"
+let g:syntastic_enable_r_lintr_checker = 1
+let g:syntastic_r_checkers = ['lintr']
 
 "
 " autoclose

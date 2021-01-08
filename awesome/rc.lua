@@ -14,6 +14,18 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- Load Debian menu entries
 require("debian.menu")
 
+-- keyboard layout
+--
+local keyboard_layout = require("keyboard_layout")
+local kbdcfg = keyboard_layout.kbdcfg({type = "gui"})
+
+kbdcfg.add_primary_layout("Portuguese", beautiful.br_layout, "br")
+kbdcfg.add_primary_layout("Русский", beautiful.ru_layout, "ru")
+
+kbdcfg.add_additional_layout("Deutsch",  beautiful.de_layout, "de")
+kbdcfg.add_additional_layout("Français", beautiful.fr_layout, "fr")
+kbdcfg.bind()
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -225,6 +237,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
+            kbdcfg.widget,
         },
     }
 end)
@@ -240,6 +253,9 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- Shift-Alt to change keyboard layout
+    awful.key({ modkey,  "Shift" }, "Right", function () kbdcfg.switch_next() end,
+              { description = "change kb layout", group ="awesome"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
