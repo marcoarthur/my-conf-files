@@ -1,0 +1,9 @@
+#!perl
+#use strictures 2;
+
+use Data::Printer colored => 1;
+$DB::alias{'pp'} = 's/^pp(.*)/Data::Printer::_p_without_prototypes(scalar $1)/';
+sub afterinit { 
+	my @breaks = split /,/, $ENV{BREAK_POINTS};
+	push @DB::typeahead, @breaks  if @breaks;
+}
