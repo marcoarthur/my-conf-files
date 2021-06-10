@@ -130,7 +130,7 @@ let g:dbext_DBI_max_column_width = 200
 " let g:dbext_default_SQLITE_bin = "/home/marco/bin/sqlite3.9"
 "set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789."
-let g:used_javascript_libs = 'angularjs,angularui,jquery'
+"let g:used_javascript_libs = 'angularjs,angularui,jquery'
 
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -157,6 +157,8 @@ Plug 'janko/vim-test'
 Plug 'junegunn/fzf'
 Plug 'arcticicestudio/nord-vim'
 Plug 'KeitaNakamura/neodark.vim'
+Plug 'preservim/nerdtree'
+Plug 'mileszs/ack.vim'
 " Plug 'dense-analysis/ale'
 call plug#end()
 
@@ -189,8 +191,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+"let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 
 " 
 " R linter
@@ -214,3 +216,32 @@ noremap <silent> <F11> :tabnew ~/.vimrc<CR>
 noremap <silent> <F9> :make<CR>
 noremap <silent> ff :FZF!<CR>
 noremap <silent> \a :set autochdir<CR>
+
+"
+" Configuring ack with ripgrep
+"
+" ack.vim --- {{{
+
+" Use ripgrep for searching ⚡️
+" Options include:
+" --vimgrep -> Needed to parse the rg response properly for ack.vim
+" --type-not sql -> Avoid huge sql file dumps as it slows down the search
+" --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
+let g:ackprg = 'rg --vimgrep --type-not sql --smart-case'
+
+" Auto close the Quickfix list after pressing '<enter>' on a list item
+let g:ack_autoclose = 1
+
+" Any empty ack search will search for the work the cursor is on
+let g:ack_use_cword_for_empty_search = 1
+
+" Don't jump to first match
+cnoreabbrev Ack Ack!
+
+" Maps <leader>/ so we're ready to type the search keyword
+nnoremap <Leader>/ :Ack!<Space>
+" }}}
+
+" Navigate quickfix list with ease
+nnoremap <silent> [q :cprevious<CR>
+nnoremap <silent> ]q :cnext<CR>

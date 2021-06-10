@@ -9,7 +9,7 @@ use strict;
 use warnings;
 use 5.022;
 use Term::ANSIColor;
-use Data::Printer;
+#use Data::Printer;
 use lib qw(./lib);
 use Mojo::Base -strict;
 use Mojo::Pg;
@@ -27,7 +27,8 @@ sub main::pg_connect {
     $pass  = prompt( "$user Password: ", -echo => '*' ) unless $pass;
     $dbase = prompt("Database name: ")                  unless $dbase;
     ( $ENV{DB_NAME}, $ENV{DB_PG_USER}, $ENV{DB_PG_PASS} ) = ( $dbase, $user, $pass );
-    my $dsn = "postgresql://$user:$pass\@$host/$dbase";
+    my $dsn = $pass ? "postgresql://$user:$pass\@$host/$dbase"
+                    : "postgresql://$user\@$host/$dbase";
     my $pg  = Mojo::Pg->new( $dsn,
         { AutoCommit => 0, RaiseError => 1, PrintError => 1, InactiveDestroy => 1 } );
     return $pg;
@@ -83,6 +84,7 @@ my @plugins = (
     'CompletionDriver::Methods',     # class method completion
     'Commands',
     'ShowClass',
+    'DataPrinter',
 );
 
 $_REPL->load_plugin($_) for @plugins;
