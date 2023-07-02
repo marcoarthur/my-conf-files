@@ -20,13 +20,14 @@ set colorcolumn=81
 set clipboard=unnamedplus
 set diffopt=vertical
 set rtp+=~/.fzf
+set rtp+=~/.vim/bundle/Vundle.vim
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn','\%81v', 100)
 colorscheme elflord
 
 
 " do tpope magic sourcery
-execute pathogen#infect()
+" execute pathogen#infect()
 
 " Augmented path to include common Catalyst directories when editing perl
 " modules
@@ -149,30 +150,65 @@ noremap <leader>p :set paste<CR>"*p:set nopaste<CR>
 
 " vim-plug
 call plug#begin('~/.vim/plugged')
-Plug 'https://github.com/Shougo/vimshell.vim.git'
-Plug 'https://github.com/Shougo/vimproc.vim.git'
-Plug 'sebdah/vim-delve'
+if has('nvim')
+    Plug 'github/copilot.vim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+endif
+
+Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'https://github.com/Shougo/vimproc.vim.git'
+Plug 'https://github.com/Shougo/vimshell.vim.git'
+Plug 'itchyny/lightline.vim'
+Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'janko/vim-test'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'leafOfTree/vim-svelte-plugin'
+Plug 'majutsushi/tagbar'
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'metakirby5/codi.vim'
+Plug 'metakirby5/codi.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'posva/vim-vue'
+Plug 'powerman/vim-plugin-viewdoc'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
+Plug 'projectfluent/fluent.vim'
+Plug 'sebdah/vim-delve'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-markdown'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+Plug 'yegappan/taglist'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'posva/vim-vue'
+Plug 'vim-syntastic/syntastic'
+Plug 'leafOfTree/vim-svelte-plugin'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
+Plug 'itchyny/lightline.vim'
+Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-rhubarb'
 call plug#end()
 
 " Vundle
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'vim-pandoc/vim-rmarkdown'
-Plugin 'posva/vim-vue'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'leafOfTree/vim-svelte-plugin'
-Plugin 'JamshedVesuna/vim-markdown-preview'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-sleuth'
-Plugin 'itchyny/lightline.vim'
-Plugin 'alvan/vim-closetag'
 call vundle#end()
+
+"=============================================================================
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 " Vim eslint
 "
@@ -202,3 +238,19 @@ noremap <silent> <F11> :tabnew ~/.vimrc<CR>
 noremap <silent> <F9> :make<CR>
 noremap <silent> ff :FZF!<CR>
 noremap <silent> \a :set autochdir<CR>
+let perl_sub_signatures = 1
+
+
+if has('nvim')
+    nnoremap <leader>ff <cmd>Telescope find_files<cr>
+    nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+    nnoremap <leader>fb <cmd>Telescope buffers<cr>
+    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+endif
+
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+    set grepformat=%f:%l:%c:%m
+endif
+
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
